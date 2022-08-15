@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>json-test</title>
+</head>
+<body>
+    <!-- 新增 給資料內容 -->
+    <div id="create">
+        <input type="text" placeholder="name"> 
+        <a href="javascirpt:;">Create</a>
+    </div>
+
+    <!-- 刪除 給資料編號 -->
+    <div id="delete">
+        <input type="text" placeholder="id"> 
+        <a href="javascirpt:;">Delete</a>
+    </div>
+
+
+    <div id="update">
+        <!-- 更新 需要兩個資料傳遞, 1.告訴系統是哪一筆(編號) 2.更新成什麼內容(內容) -->
+        <input type="text" placeholder="id" name="id"> 
+        <input type="text" placeholder="name" name="name"> 
+        <a href="javascirpt:;">Update</a>
+    </div>
+
+    
+    <hr>
+    <ul id="users"></ul>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js' integrity='sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==' crossorigin='anonymous'></script>
+    <script>
+            // 查詢------------------------------------------------
+        $(function(){
+            $.ajax({
+                url:'http://localhost:3000/users', // API網址
+                method:'get', // 預設值GET==拿 (get之外的post put delete等才要寫method)
+                dataType:'json',
+                data:{} // get不需要data, 其他才要, 這裡可以不用寫
+            })
+            .done(function(res){ // .done接收資料
+                console.log(res)
+                $('users').empty() // objcet裡的users的內容 使用empty顯示, jquery的empty()功能為 移除標籤的文字內容與子元素
+                res.foreach(function(user){ // 由於這裡的users是一個陣列, 所以用foreach循序給出內容
+                    $('#users').append('<li>'+user.id+user.name+'</li>') // 在每個id為users的標籤, 插入(內容:'<li>'+user.name+'</li>')
+                    // $('插入的標籤').append('插入的內容')
+                    // 這裡可以看到用append再上面id名為users的ul標籤內=>寫入li標籤=>li標籤內再寫入用foreach(user)的name的內容
+                })
+            })
+            .fail(function(err){ // .fail接收錯誤訊息
+                console.log(err);
+            })
+            // 新增------------------------------------------------給data
+            $('#create > a').on('click',function(){ // id名create的標籤 的 a標籤 onclick時執行該function
+                let name = $('#create > input').val().trim() // trim()==去空白, 變數name為 id為create的標籤 的 input標籤所填入的值, 且將該值去除空白
+                if (!name) return false; // 上述trim砍完空白若name還是空值, 則return 離開
+                $.ajax({
+                    url:'http://localhost:3000/users',
+                    method:'post', // POST==新增
+                    dataType:'json',
+                    data:{
+                        name:$('#create > input').val() // name為:再id為create的標籤 的 input標籤 寫入 值
+                    }
+                })
+            })
+            // 刪除------------------------------------------------調整url
+            $('#delete > a').on('click',function(){ // id名delete的標籤 的 a標籤 onclick時執行該function
+                let id = $('#delete > input').val().trim() // trim()==去空白, 變數id為 id為delete的標籤 的 input標籤所填入的值, 且將該值去除空白
+                if (!id) return false; // 上述trim砍完空白若id還是空值, 則return 離開
+                $.ajax({
+                    url:'http://localhost:3000/users'+id, // 用網址帶值, 此為該網址的id, 例:http://localhost:3000/users/1
+                    method:'delete',
+                    dataType:'json',
+                    // delete不需要data
+                })
+            })
+            // 更新------------------------------------------------兩個都給
+            $('#update > a').on('click',function(){ // id名update的標籤 的 a標籤 onclick時執行該functionㄝ, 以下做兩個判斷
+                let id = $('#update > input[name=id]').val().trim() // 用[]篩選, 該input的name值為id
+                if (!id) return false;
+                let name = $('#update > input[name=name]').val().trim() // 用[]篩選, 該input的name值為name
+                if (!name) return false; 
+                $.ajax({
+                    url:'http://localhost:3000/users'+id,// 用網址帶值, 此為該網址的id, 例:http://localhost:3000/users/1
+                    method:'put', // PUT==更新
+                    dataType:'json',
+                    data:{
+                        name: name // name為: 上述let name變數, 由使用者填入的內容(更新內容)
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>
