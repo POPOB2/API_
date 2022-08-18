@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>將dataTable與API-curl結合</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+
+</head>
+
+<body>
+    <table id="table_id" class="display">
+        <!-- <thead>
+            <tr>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+                <th>Column 4</th>
+            </tr>
+        </thead> -->
+    </table>
+
+
+    <script>
+        // cmd -> ipconfig -> get ip
+
+        // $.getJSON('https://data.ntpc.gov.tw/api/datasets/71CD1490-A2DF-4198-BEF1-318479775E8A/json?page=0&size=100')
+        //     .done(function (res) {
+        //         console.log(res);
+        //     });
+
+        // html http://localhost/myApi.html
+
+        // 第一組 localhost html vs localhost php
+        // $.getJSON('./myApi2.php')
+        //     .done(function (res) {
+        //         console.log(res);
+        //         console.log(res[0]);
+        //         console.log(res[0]['sno']);
+        //     });
+
+        // 第二組
+        // cmd -> ipconfig ->抓到你電腦的ip
+        // mac -> ifconfig 
+
+        // domain 不同 
+        // localhost vs 192.168.211.3            
+        // $.getJSON('http://192.168.211.3/myApi2.php')
+        //     .done(function (res) {
+        //         console.log(res);
+        //         console.log(res[0]);
+        //         console.log(res[0]['sno']);
+        //     });
+
+
+        // ajax
+        $.ajax({
+            dataType: 'json',
+            url: 'http://192.168.211.3/myApi2.php',
+            // data: 
+            success: function (res) {
+                // console.log(res);
+                // console.log(res[0]);
+                // console.log(res[0]['sno']);
+
+                $('#table_id').DataTable({
+                    data: res,
+                    columns: [{
+                            data: 'sno',
+                            title: '編號'
+                        },
+                        {
+                            data: 'sna',
+                            title: '名稱'
+                        },
+                        {
+                            data: 'sarea',
+                            title: '區域'
+                        },
+                        {
+                            data: 'ar',
+                            title: '地址'
+
+                        }
+                    ]
+                });
+            }
+        })
+    </script>
+
+</body>
+
+</html> 
