@@ -1,0 +1,30 @@
+<body>
+    <script>
+        // cmd -> ipconfig -> get ip
+
+        // $.getJSON('https://data.ntpc.gov.tw/api/datasets/71CD1490-A2DF-4198-BEF1-318479775E8A/json?page=0&size=100')
+        //     .done(function (res) {
+        //         console.log(res);
+        //     });
+
+        $.getJSON('./myApi2.php')
+        // html http://localhost/myApi.html
+
+        // 第一組 localhost html vs localhost php
+        // $.getJSON('./myApi2.php')
+        //     .done(function (res) {
+        //         console.log(res);
+        //         console.log(res[0]);
+        //         console.log(res[0]['sno']);
+        //     });
+
+        // 第二組
+        $.getJSON('http://192.168.211.3/myApi2.php')
+            .done(function (res) {
+                console.log(res);
+                console.log(res[0]);
+                console.log(res[0]['sno']);
+            });
+    </script>
+</body>
+</html>
